@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feliz Cumpleaños Andreita 🎀</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,500&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:       #f4a7b9;
+      --rose-light: #fce4ec;
+      --rose-deep:  #e8789a;
+      --blush:      #fff0f5;
+      --gold:       #d4a843;
+      --gold-light: #f5e6b8;
+      --gold-shine: #ffe8a3;
+      --cream:      #fffaf5;
+      --text-dark:  #5c3347;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--blush);
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--text-dark);
+    }
+
+    /* ── Particle canvas ── */
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+    /* ── Slide container ── */
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.9s ease, transform 0.9s ease;
+      transform: translateY(30px);
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    .slide.exit {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+
+    /* ── Slide backgrounds ── */
+    .slide-1 { background: radial-gradient(ellipse at 30% 40%, #ffe0ec 0%, #fff0f5 55%, #fce9d0 100%); }
+    .slide-2 { background: radial-gradient(ellipse at 70% 60%, #fce4ec 0%, #fff5fb 50%, #fef9e7 100%); }
+    .slide-3 { background: radial-gradient(ellipse at 50% 30%, #fef9e7 0%, #fff0f5 60%, #fce4ec 100%); }
+    .slide-4 { background: radial-gradient(ellipse at 20% 70%, #fff5fb 0%, #fef9e7 50%, #fce4ec 100%); }
+    .slide-5 { background: radial-gradient(ellipse at 80% 30%, #fce4ec 0%, #fff0f5 55%, #fef9e7 100%); }
+    .slide-6 { background: radial-gradient(ellipse at 50% 80%, #fef9e7 0%, #fce4ec 50%, #fff0f5 100%); }
+
+    /* ── Card frame ── */
+    .card {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(212,168,67,0.35);
+      border-radius: 28px;
+      padding: 3rem 3.5rem;
+      max-width: 640px;
+      width: 100%;
+      text-align: center;
+      box-shadow:
+        0 8px 40px rgba(232,120,154,0.18),
+        0 2px 10px rgba(212,168,67,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 18px,
+        rgba(212,168,67,0.04) 18px,
+        rgba(212,168,67,0.04) 19px
+      );
+      border-radius: 28px;
+      pointer-events: none;
+    }
+
+    /* ── Gold corner ornaments ── */
+    .card::after {
+      content: '✦';
+      position: absolute;
+      top: 14px; right: 18px;
+      font-size: 1rem;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    .corner-tl {
+      position: absolute;
+      top: 14px; left: 18px;
+      font-size: 1rem;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    /* ── Typography ── */
+    .eyebrow {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.1rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+      line-height: 1.25;
+    }
+
+    .headline-italic {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.5rem, 5vw, 2.4rem);
+      color: var(--rose-deep);
+      margin-bottom: 0;
+    }
+
+    .headline-bold {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      background: linear-gradient(135deg, var(--rose-deep) 0%, var(--gold) 60%, var(--rose-deep) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .body-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      line-height: 1.75;
+      color: var(--text-dark);
+      margin-top: 1rem;
+    }
+
+    .body-text em {
+      font-style: italic;
+      color: var(--rose-deep);
+    }
+
+    .big-reveal {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2rem, 7vw, 3.5rem);
+      background: linear-gradient(135deg, var(--gold) 0%, #f8d57e 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 8px rgba(212,168,67,0.35));
+      margin: 0.5rem 0;
+    }
+
+    .sign-off {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      color: var(--rose-deep);
+      margin-top: 1.2rem;
+    }
+
+    /* ── Decorative divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin: 1rem auto;
+      width: fit-content;
+      color: var(--gold);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    /* ── Emoji / icon accent ── */
+    .big-emoji {
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      display: block;
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 4px 12px rgba(232,120,154,0.4));
+      animation: floatEmoji 3s ease-in-out infinite;
+    }
+
+    @keyframes floatEmoji {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50% { transform: translateY(-8px) rotate(3deg); }
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.7);
+      border: 1.5px solid rgba(212,168,67,0.5);
+      color: var(--text-dark);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.25s;
+      box-shadow: 0 3px 12px rgba(232,120,154,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-btn:hover {
+      background: var(--rose-deep);
+      color: #fff;
+      border-color: var(--rose-deep);
+      transform: scale(1.1);
+    }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; transform: none; }
+
+    /* ── Dots ── */
+    .dots {
+      display: flex;
+      gap: 0.45rem;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(212,168,67,0.3);
+      border: 1px solid rgba(212,168,67,0.5);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dot.active {
+      background: var(--gold);
+      transform: scale(1.3);
+    }
+
+    /* ── Confetti burst on slide 2 ── */
+    .confetti-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 28px;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 7px; height: 10px;
+      opacity: 0;
+      border-radius: 2px;
+    }
+
+    /* ── Sparkle line ── */
+    .sparkle-line {
+      display: flex;
+      gap: 0.4rem;
+      justify-content: center;
+      margin: 0.8rem 0;
+    }
+    .sparkle-line span {
+      color: var(--gold);
+      font-size: 0.9rem;
+      animation: twinkle 1.5s ease-in-out infinite;
+    }
+    .sparkle-line span:nth-child(2) { animation-delay: 0.3s; }
+    .sparkle-line span:nth-child(3) { animation-delay: 0.6s; }
+    .sparkle-line span:nth-child(4) { animation-delay: 0.9s; }
+    .sparkle-line span:nth-child(5) { animation-delay: 1.2s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* ── Slide 6 heart pulse ── */
+    .heart-big {
+      font-size: 4rem;
+      display: inline-block;
+      animation: heartPulse 1s ease-in-out infinite;
+    }
+    @keyframes heartPulse {
+      0%, 100% { transform: scale(1); }
+      40% { transform: scale(1.15); }
+      60% { transform: scale(1.08); }
+    }
+
+    /* ── Ribbon banner (slide 4) ── */
+    .ribbon {
+      background: linear-gradient(135deg, var(--gold) 0%, #f8d57e 50%, var(--gold) 100%);
+      color: #5c3347;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.4rem;
+      padding: 0.5rem 2.5rem;
+      border-radius: 40px;
+      display: inline-block;
+      margin-top: 0.8rem;
+      box-shadow: 0 4px 18px rgba(212,168,67,0.4);
+    }
+
+    /* ── Mobile tweaks ── */
+    @media (max-width: 480px) {
+      .card { padding: 2rem 1.6rem; border-radius: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1 -->
+  <div class="slide slide-1 active" data-index="0">
+    <div class="card">
+      <span class="corner-tl">✦</span>
+      <span class="big-emoji">🎀</span>
+      <p class="headline-italic">Más vale tarde que nunca…</p>
+      <div class="sparkle-line">
+        <span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide slide-2" data-index="1">
+    <div class="card">
+      <span class="corner-tl">✦</span>
+      <div class="confetti-wrap" id="confettiWrap"></div>
+      <span class="big-emoji">🌸</span>
+      <h1 class="headline-bold">¡Felices 18, Andreita! &lt;3</h1>
+      <div class="divider">✦✧✦</div>
+      <p class="body-text">
+        A pesar de que los números aumenten, en mi corazón siempre serás
+        la niña obsesionada con <em>Hello Kitty</em>, <em>Dora la Exploradora</em>
+        y un trapo sucio.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide slide-3" data-index="2">
+    <div class="card">
+      <span class="corner-tl">✦</span>
+      <span class="big-emoji">🎁</span>
+      <p class="headline-italic" style="font-size:clamp(1.3rem,4vw,2rem);">
+        Claramente, no iba a pasar desapercibida esta fecha…
+      </p>
+      <div class="sparkle-line">
+        <span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span>
+      </div>
+      <p class="body-text">y tu regalo de cumpleaños es…</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide slide-4" data-index="3">
+    <div class="card">
+      <span class="corner-tl">✦</span>
+      <span class="big-emoji">🛁</span>
+      <p class="big-reveal">… ¡una tarde de spa juntas!</p>
+      <div class="ribbon">✨ relax & glow ✨</div>
+      <div class="sparkle-line" style="margin-top:1rem;">
+        <span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide slide-5" data-index="4">
+    <div class="card">
+      <span class="corner-tl">✦</span>
+      <span class="big-emoji">🌷</span>
+      <div class="divider">✦✧✦</div>
+      <p class="body-text" style="font-size:clamp(1.05rem,3.2vw,1.3rem); margin-top:0;">
+        Estoy curiosa por poder seguir conociendo esta versión adulta de ti,
+        que sin duda <em>nos llena de orgullo</em> a todos los que te queremos.
+      </p>
+      <div class="divider">✦✧✦</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div class="slide slide-6" data-index="5">
+    <div class="card">
+      <span class="corner-tl">✦</span>
+      <span class="heart-big">🩷</span>
+      <p class="body-text" style="font-size:clamp(1.1rem,3.5vw,1.4rem); margin-top:0;">
+        Te quiero muchísimo.
+      </p>
+      <div class="divider">✦✧✦</div>
+      <p class="sign-off">Con cariño, Mile 💛</p>
+      <div class="sparkle-line" style="margin-top:0.8rem;">
+        <span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav>
+  <button class="nav-btn" id="prevBtn" disabled>←</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn">→</button>
+</nav>
+
+<script>
+  /* ── Particle system ── */
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLORS = ['#f4a7b9','#d4a843','#ffe8a3','#fce4ec','#e8789a','#f5e6b8'];
+
+  class Particle {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random() * W;
+      this.y = init ? Math.random() * H : H + 10;
+      this.r = Math.random() * 3 + 1;
+      this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      this.speed = Math.random() * 0.6 + 0.2;
+      this.drift = (Math.random() - 0.5) * 0.4;
+      this.alpha = Math.random() * 0.5 + 0.2;
+      this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+      this.twinklePhase = Math.random() * Math.PI * 2;
+    }
+    update() {
+      this.twinklePhase += this.twinkleSpeed;
+      this.y -= this.speed;
+      this.x += this.drift;
+      if (this.y < -10) this.reset(false);
+    }
+    draw() {
+      const a = this.alpha * (0.6 + 0.4 * Math.sin(this.twinklePhase));
+      ctx.globalAlpha = a;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 90; i++) particles.push(new Particle());
+
+  function animParticles() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animParticles);
+  }
+  animParticles();
+
+  /* ── Slide logic ── */
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsEl = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  let current = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current].classList.remove('exit'), 900);
+    current = idx;
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
+    if (current === 1) triggerConfetti();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  // Swipe support
+  let touchX = null;
+  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
+  document.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const diff = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
+    touchX = null;
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(current - 1);
+  });
+
+  /* ── Confetti burst ── */
+  function triggerConfetti() {
+    const wrap = document.getElementById('confettiWrap');
+    wrap.innerHTML = '';
+    const confColors = ['#f4a7b9','#d4a843','#ffe8a3','#e8789a','#fce4ec','#fff0c0'];
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.cssText = `
+        left: ${Math.random()*100}%;
+        top: -14px;
+        background: ${confColors[Math.floor(Math.random()*confColors.length)]};
+        transform: rotate(${Math.random()*360}deg);
+        animation: fall ${1.2 + Math.random()*1.6}s ease-in ${Math.random()*0.8}s forwards;
+      `;
+      wrap.appendChild(p);
+    }
+  }
+
+  // Inject confetti keyframes
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fall {
+      0%   { opacity:1; transform: translateY(0)   rotate(0deg)   scaleX(1); }
+      100% { opacity:0; transform: translateY(320px) rotate(540deg) scaleX(-1); }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+</body>
+</html>
